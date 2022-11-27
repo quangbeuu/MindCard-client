@@ -18,4 +18,6 @@ const auth = getAuth(app);
 const firestore = getFirestore(app);
 const storage = getStorage(app);
 
-export { app, firestore, storage, auth };
+const domain = "http://localhost:3000";
+
+export { app, firestore, storage, auth, domain };

@@ -34,7 +34,7 @@ const InputForm = ({
             type={type}
             id={id}
             name={id}
-            class="outline-0 bg-[#f3f3f3] text-lg w-full"
+            className="outline-0 bg-[#f3f3f3] text-lg w-full"
             {...field}
           ></input>
         </div>

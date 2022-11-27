@@ -8,6 +8,7 @@ export default function useGetImageUrl() {
     const file = e.target.files[0];
 
     // Tạo tham chiếu đến nơi lưu trữ ảnh trên firebase-storage
+    console.log(file);
     const storageRef = ref(storage, file.name);
     // Upload ảnh lên firebase
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -37,5 +38,6 @@ export default function useGetImageUrl() {
   return {
     imageCover,
     getImageUrl,
+    setImageCover,
   };
 }

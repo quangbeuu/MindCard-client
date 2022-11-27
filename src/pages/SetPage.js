@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation, A11y } from "swiper";
+import { Navigation, A11y, Autoplay } from "swiper";
 
 import Header from "../components/common/Header";
 
@@ -13,10 +13,72 @@ import StillLearning from "../components/layout/cardLayout/StillLearning";
 import NotStudied from "../components/layout/cardLayout/NotStudied";
 import CardDetails from "../components/card/CardDetails";
 
+import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
+import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
+import {
+  getCard,
+  getNotStudied,
+  getStudied,
+  joinSet,
+} from "../realtimeCommunication/socketConnection";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getSetInfo } from "../store/set/slice";
+import { Modal } from "../components/modal";
+import { setShowReview, setShowTestModel } from "../store/show/showSlice";
+import TypeTestModal from "../components/modal/TypeTestModal";
+import ReviewModal from "../components/modal/ReviewModal";
+
 const SetPage = () => {
+  const { setId } = useParams();
   const [swiper, setSwiper] = React.useState();
   const prevRef = React.useRef();
   const nextRef = React.useRef();
+  const { cardListReal, cardStudied } = useSelector((state) => state.card);
+  const { cardShow } = useSelector((state) => state.cardDetail);
+  const { showTestModel, showReview } = useSelector((state) => state.show);
+
+  // B1: Lấy tất cả các từ vựng tiếng việt trong Card
+  const allWordVN = cardListReal.map((card) => {
+    return card.meaningUsers;
+  });
+
+  // B2: Tạo câu trả lời câu hỏi loại trừ đáp án
+  const handleOptionsQuestion = (word) => {
+    return allWordVN.filter((item) => item !== word);
+  };
+
+  // B3: Hàm lấy ra 3 đáp án bất ký
+  function getMultipleRandomInArray(arr, num) {
+    const shuffled = [...arr].sort(() => 0.5 - Math.random());
+
+    return shuffled.slice(0, num);
+  }
+
+  // B4: Tạo 4 lựa chọn câu trả lời
+  const createOption = (word) => {
+    const arrayAcceptAnswer = handleOptionsQuestion(word);
+    const arrayRandom = getMultipleRandomInArray(arrayAcceptAnswer, 3);
+    return [...arrayRandom, word];
+  };
+
+  const questionMulty = cardListReal.map((card) => {
+    return {
+      question: card.word,
+      type: "multiple-choice",
+      options: createOption(card.meaningUsers),
+      answer: card.meaningUsers,
+    };
+  });
+
+  const questionEssay = cardListReal.map((card) => {
+    return {
+      question: card.word,
+      type: "essay",
+      answer: card.meaningUsers,
+    };
+  });
+
   React.useEffect(() => {
     if (swiper) {
       console.log("Swiper instance:", swiper);
@@ -27,6 +89,22 @@ const SetPage = () => {
       swiper.navigation.update();
     }
   }, [swiper]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    joinSet(setId);
+  }, [setId]);
+
+  useEffect(() => {
+    getCard(setId);
+    getStudied(setId);
+    getNotStudied(setId);
+  }, [setId]);
+
+  useEffect(() => {
+    dispatch(getSetInfo(setId));
+  }, [dispatch, setId]);
+
   return (
     <div>
       <Header></Header>
@@ -36,9 +114,10 @@ const SetPage = () => {
           <div className="max-w-[70%] px-[20px] pb-[64px] w-full ml-[20px]">
             <div>
               <Swiper
+                // autoplay={{ delay: 5000 }}
                 spaceBetween={50}
                 slidesPerView={1}
-                modules={[Navigation, A11y]}
+                modules={[Navigation, A11y, Autoplay]}
                 navigation={{
                   nextEl: ".swiper-next",
                   prevEl: ".swiper-prev",
@@ -46,71 +125,60 @@ const SetPage = () => {
                 onSlideChange={() => console.log("slide change")}
                 onSwiper={setSwiper}
               >
-                <SwiperSlide>
-                  <Card></Card>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <Card></Card>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <Card></Card>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <Card></Card>
-                </SwiperSlide>
+                {cardListReal.map((card, index) => (
+                  <SwiperSlide key={card._id}>
+                    <Card cardInfo={card} index={index}></Card>
+                  </SwiperSlide>
+                ))}
+
                 <div className="flex justify-end mt-[20px]">
                   <div
-                    className="swiper-prev bg-white rounded-full p-[10px] cursor-pointer"
+                    className="swiper-prev bg-white rounded-full p-[14px] cursor-pointer"
                     ref={prevRef}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      class="w-8 h-8 text-[#586380]"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15.75 19.5L8.25 12l7.5-7.5"
-                      />
-                    </svg>
+                    <ArrowBackIosRoundedIcon className="text-[40px] text-[#586380]" />
                   </div>
                   <div
-                    className="swiper-next bg-white rounded-full p-[10px] ml-[10px] cursor-pointer"
+                    className="swiper-next bg-white rounded-full p-[14px] ml-[10px] cursor-pointer"
                     ref={nextRef}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="w-8 h-8 text-[#586380]"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                      />
-                    </svg>
+                    <ArrowForwardIosRoundedIcon className="text-[40px] text-[#586380]" />
                   </div>
                 </div>
               </Swiper>
             </div>
             <div className="h-[1px] bg-[#d9dde8] mt-[1rem] w-full"></div>
-            <CreatedBy></CreatedBy>
+            {cardStudied && <CreatedBy></CreatedBy>}
             <div className="font-bold text-[#303545] text-[20px] mt-[40px]">
-              Terms in this set (49)
+              Terms in this set ({cardListReal.length})
             </div>
-            <StillLearning></StillLearning>
             <NotStudied></NotStudied>
+            <StillLearning></StillLearning>
           </div>
         </div>
       </div>
-      <CardDetails></CardDetails>
+      <CardDetails show={cardShow}></CardDetails>
+      <Modal
+        title="Choose type of test"
+        showModal={showTestModel}
+        handleClose={() => {
+          dispatch(setShowTestModel(false));
+        }}
+      >
+        <TypeTestModal
+          questionMulty={questionMulty}
+          questionEssay={questionEssay}
+        ></TypeTestModal>
+      </Modal>
+      <Modal
+        title="How would you rate this set ?"
+        showModal={showReview}
+        handleClose={() => {
+          dispatch(setShowReview(false));
+        }}
+      >
+        <ReviewModal></ReviewModal>
+      </Modal>
     </div>
   );
 };

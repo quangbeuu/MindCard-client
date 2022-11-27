@@ -6,7 +6,6 @@ import {
   CheckMailPage,
   ClassPage,
   ErrorPage,
-  FlashCardPage,
   ForgotPasswordPage,
   HomePage,
   SetNewPasswordPage,
@@ -17,6 +16,9 @@ import {
   CreateSetPage,
   SetPage,
 } from "./pages";
+import EssayPage from "./pages/test/EssayPage";
+import MultipleChoicePage from "./pages/test/MultipleChoicePage";
+import ResultPage from "./pages/test/ResultPage";
 
 import { getIsLogin } from "./store/auth/slice";
 
@@ -54,21 +56,29 @@ const Router = () => {
       )}
       {isLogin && (
         <>
-          <Route
-            path="/flashcards"
-            element={<FlashCardPage></FlashCardPage>}
-          ></Route>
           <Route path="/profile" element={<UserProfile></UserProfile>}></Route>
-          <Route
+          {/* <Route
             path="/class/:classId/*"
             element={<ClassPage></ClassPage>}
-          ></Route>
+          ></Route> */}
           <Route path="/settings" element={<SettingPage></SettingPage>}></Route>
           <Route
-            path="/createSet"
+            path="/createSet/:setId"
             element={<CreateSetPage></CreateSetPage>}
           ></Route>
-          <Route path="/set/:setId/*" element={<SetPage></SetPage>}></Route>
+          <Route path="/set/:setId" element={<SetPage></SetPage>}></Route>
+          <Route
+            path="/set/:setId/multiple-choice/:testId"
+            element={<MultipleChoicePage></MultipleChoicePage>}
+          ></Route>
+          <Route
+            path="/set/:setId/essay/:testId"
+            element={<EssayPage></EssayPage>}
+          ></Route>
+          <Route
+            path="/set/:setId/result/:testId/:type"
+            element={<ResultPage></ResultPage>}
+          ></Route>
         </>
       )}
     </Routes>

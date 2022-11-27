@@ -18,7 +18,11 @@
     font-size: 14px;
     line-height: 24px;
     color: #303545;
+    outline: none;
   }
+}
+html {
+  scroll-behavior: smooth;
 }
 
 .bg-radient::after {
@@ -186,6 +190,10 @@
   box-shadow: rgba(0, 0, 0, 0.2) 0 0.125rem 0.625rem;
 }
 
+.shadow-card {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
 .dropbox::after {
   content: "";
   height: 0;
@@ -297,4 +305,33 @@
 }
 .alert.error > .close-btn:hover {
   background-color: #fa7c89;
+}
+
+// Làm text thành 3 dòng và dấu 3 chấm
+.text-short {
+  max-width: 120px;
+  width: 100%;
+  display: block;
+  display: -webkit-box;
+  height: 14px * 1.3 * 1;
+  font-size: 14px;
+  line-height: 1.3;
+  -webkit-line-clamp: 1; /* số dòng hiển thị */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.active-question {
+  background-color: red;
+}
+
+// Progress bar
+
+.MuiLinearProgress-root {
+  background-color: #ff983a !important;
+}
+
+.MuiLinearProgress-bar {
+  background-color: #65c998 !important;
 }

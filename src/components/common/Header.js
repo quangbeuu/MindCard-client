@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+
 import logo from "../../assets/img/home/logo.png";
 import useToggleValue from "../../hooks/useToggleValue";
 import useAuthStateChanged from "../../hooks/useAuthStateChanged";
-import { SmallButton } from "../button";
-import { CreateBox, UserIcon } from "../box";
+import { ButtonModal, SmallButton } from "../button";
+import { CreateBox, Notification, UserIcon } from "../box";
 import axios from "axios";
 import { ClassModal, Modal } from "../modal";
-import { useDispatch } from "react-redux";
 import {
   setMessage,
   setShowAlert,
   setType,
 } from "../../store/alert/alertSlice";
 import { connectWithSocketServer } from "../../realtimeCommunication/socketConnection";
+import FriendInvitation from "../box/FriendInvitation";
+import MessageList from "../box/MessageList";
+import { InputModal } from "../input";
+import { setShowInvitationBox } from "../../store/show/showSlice";
 
 const ListLink = [
   {
@@ -35,13 +44,28 @@ const ListLink = [
 
 const Header = () => {
   const { value: show, handleToggleValue: handleIconClick } = useToggleValue();
+  const { showInvitationBox } = useSelector((state) => state.show);
 
-  const { isLogin } = useAuthStateChanged();
+  const dispatch = useDispatch();
+  const { isLogin, user } = useAuthStateChanged();
   console.log("isLogin", isLogin);
 
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
 
   let navigate = useNavigate();
+
+  const schema = yup.object({
+    email: yup.string().email().required("Please enter your email."),
+  });
+  const {
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+    control,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+    //mode: onChange để sử dụng đc thằng isValid (ko nó sẽ mãi mãi là false)
+  });
 
   const handleLogout = async () => {
     try {
@@ -53,22 +77,62 @@ const Header = () => {
     }
   };
 
-  const handleShowModel = () => {
-    setShowModal(true);
-  };
-  const dispatch = useDispatch();
+  // const handleShowModel = () => {
+  //   setShowModal(true);
+  // };
+
   const handleAlert = () => {
     dispatch(setShowAlert(true));
     dispatch(setMessage("You are not logged in! Please log in to get access."));
     dispatch(setType("notice"));
   };
 
+  const goToSetPage = async () => {
+    try {
+      const sets = await axios.post("http://localhost:3000/api/v1/sets", {
+        name: "Test Set",
+      });
+
+      const setId = sets.data.data.sets._id;
+
+      navigate(`/createSet/${setId}`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     if (!isLogin) {
     } else {
-      connectWithSocketServer();
+      connectWithSocketServer(user, dispatch);
     }
-  }, [isLogin]);
+  }, [isLogin, user, dispatch]);
+
+  const onSubmitHandler = async (values) => {
+    if (isValid) {
+      try {
+        await axios.post(
+          `http://localhost:3000/api/v1/friend-invitation/invite`,
+          {
+            targetMailAddress: values.email,
+          }
+        );
+
+        dispatch(setShowInvitationBox(false));
+        setShowInvitationBox(false);
+        dispatch(setShowAlert(true));
+        dispatch(setMessage("Invitation has been sent"));
+        dispatch(setType("success"));
+      } catch (err) {
+        console.log(err);
+        dispatch(setShowInvitationBox(false));
+        setShowInvitationBox(false);
+        dispatch(setShowAlert(true));
+        dispatch(setMessage(err.response.data.message));
+        dispatch(setType("error"));
+      }
+    }
+  };
   return (
     <>
       <header className="max-h-[63px] flex items-center justify-between py-[15px] px-[20px] fixed bg-white z-20 w-full border border-b-[0.0625rem] solid">
@@ -86,14 +150,14 @@ const Header = () => {
             <li>
               <SmallButton
                 className="text-white bg-primary hover:bg-secondary relative"
-                onClick={isLogin ? handleIconClick : handleAlert}
+                onClick={isLogin ? goToSetPage : handleAlert}
               >
                 <span>Create</span>
-                <CreateBox
+                {/* <CreateBox
                   showBox={show}
                   isLogin={isLogin}
                   handleShowModel={handleShowModel}
-                ></CreateBox>
+                ></CreateBox> */}
               </SmallButton>
             </li>
           </ul>
@@ -112,6 +176,9 @@ const Header = () => {
           )}
           {isLogin && (
             <>
+              {/* <FriendInvitation></FriendInvitation> */}
+              <MessageList></MessageList>
+              <Notification></Notification>
               <SmallButton
                 className="bg-[#ffcd1f] hover:bg-[#ffdc62]"
                 onClick={handleLogout}
@@ -122,6 +189,8 @@ const Header = () => {
             </>
           )}
         </div>
+
+        {/* Responsive */}
         <div
           className={`menu-button w-[30px] h-[30px] cursor-pointer block lg:hidden ${
             show ? "show" : ""
@@ -151,8 +220,33 @@ const Header = () => {
           </ul>
         </div>
 
-        <Modal showModal={showModal} handleClose={() => setShowModal(false)}>
+        {/* <Modal showModal={showModal} handleClose={() => setShowModal(false)}>
           <ClassModal></ClassModal>
+        </Modal> */}
+
+        <Modal
+          showModal={showInvitationBox}
+          handleClose={() => dispatch(setShowInvitationBox(false))}
+          title="Add Friend"
+        >
+          <form onSubmit={handleSubmit(onSubmitHandler)}>
+            <InputModal
+              id="email"
+              placeHolder="Enter your friend's email"
+              text="email"
+              control={control}
+            ></InputModal>
+            <p className="text-red-400 font-semibold mb-[10px]">
+              {errors.email?.message}
+            </p>
+            <ButtonModal>
+              {isSubmitting ? (
+                <div className="w-10 h-10 rounded-full border-4 border-white border-t-transparent border-b-transparent animate-spin mx-auto"></div>
+              ) : (
+                "Invite member"
+              )}
+            </ButtonModal>
+          </form>
         </Modal>
       </header>
     </>

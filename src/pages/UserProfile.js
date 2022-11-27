@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../components/common/Header";
+import { ClassItem } from "../components/layout/class";
 import useAuthStateChanged from "../hooks/useAuthStateChanged";
-import ClassItem from "../item/ClassItem";
 
 const UserProfile = () => {
   const { user } = useAuthStateChanged();

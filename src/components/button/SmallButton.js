@@ -6,6 +6,7 @@ const SmallButton = ({ children, className, onClick }) => {
     <button
       className={`text-[16px] font-medium ml-[18px] px-[12px] py-[6px]  rounded-[0.25rem]  transition duration-100ms ease-in ${className}`}
       onClick={onClick}
+      type="submit"
     >
       {children}
     </button>
