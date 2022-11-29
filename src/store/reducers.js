@@ -12,6 +12,7 @@ import chatSlice from "./chat/slice";
 import friendSlice from "./friend/friendSlice";
 import testSlice from "./test/testSlice";
 import resultSlice from "./results/slice";
+import videoSlice from "./video/slice";
 
 export const reducer = combineReducers({
   auth: authSlice,
@@ -26,4 +27,5 @@ export const reducer = combineReducers({
   friend: friendSlice,
   test: testSlice,
   results: resultSlice,
+  video: videoSlice,
 });

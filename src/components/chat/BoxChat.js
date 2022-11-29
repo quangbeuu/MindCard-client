@@ -13,7 +13,7 @@ const BoxChat = () => {
   const [message, setMessage] = useState("");
   const { showCardBox } = useSelector((state) => state.show);
   const { chosenChatDetails } = useSelector((state) => state.chat);
-  // console.log(chosenChatDetails);
+
   const handleMessageValueChange = (e) => {
     e.preventDefault();
     setMessage(e.target.value);
@@ -28,16 +28,17 @@ const BoxChat = () => {
   const handleSendMessage = () => {
     if (message.length > 0) {
       sendDirectMessage({
-        receiverUserId: chosenChatDetails.id,
+        roomChatId: chosenChatDetails.id,
         content: message,
       });
+
       setMessage("");
     }
   };
 
   useEffect(() => {
     getDirectChatHistory({
-      receiverId: chosenChatDetails.id,
+      roomId: chosenChatDetails.id,
     });
   }, [chosenChatDetails]);
   return (

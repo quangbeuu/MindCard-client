@@ -6,30 +6,31 @@ export const updateDirectChatHistoryIfActive = (data) => {
 
   //   console.log({ participants, messages });
   // 1. Tìm Id ng dùng dựa vào token và Id ng dùng từ active conversation
-  const receiverId = store.getState().chat.chosenChatDetails?.id;
-  const userid = store.getState().auth.user?._id;
+  const participant = store.getState().chat.chosenChatDetails.participants;
+  // const userid = store.getState().auth.user?._id;
 
-  if (receiverId && userid) {
-    const usersInConversation = [receiverId, userid];
-    // console.log(usersInConversation);
+  // if (receiverId && userid) {
+  //   const usersInConversation = [receiverId, userid];
+  //   // console.log(usersInConversation);
 
-    updateChatHistoryIfSameConversationActive({
-      participants,
-      usersInConversation,
-      messages,
-    });
-  }
+  updateChatHistoryIfSameConversationActive({
+    participants,
+    participant,
+    messages,
+  });
 };
 
 const updateChatHistoryIfSameConversationActive = ({
   participants,
-  usersInConversation,
+  participant,
   messages,
 }) => {
   // Kiểm tra xem ng dùng có đang trò chuyện hay k
   const result = participants.every((participantId) => {
-    return usersInConversation.includes(participantId);
+    return participant.includes(participantId);
   });
+
+  console.log("dn", messages);
   if (result) {
     store.dispatch(setMessages(messages));
   }

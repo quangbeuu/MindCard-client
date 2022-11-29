@@ -176,7 +176,7 @@ const Header = () => {
           )}
           {isLogin && (
             <>
-              {/* <FriendInvitation></FriendInvitation> */}
+              <FriendInvitation></FriendInvitation>
               <MessageList></MessageList>
               <Notification></Notification>
               <SmallButton

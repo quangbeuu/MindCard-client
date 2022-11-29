@@ -34,7 +34,6 @@ const InvitationBox = ({ isOpen = false }) => {
           </div>
         )}
         {pendingFriendInvitation.map((invitation) => {
-          console.log(invitation);
           return (
             <InvitationItem key={invitation._id} invitation={invitation} />
           );

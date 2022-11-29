@@ -8,10 +8,11 @@ import { setShowCardBox } from "../../store/show/showSlice";
 
 const MessageListBox = ({ isOpen, onClick = () => {} }) => {
   const dispatch = useDispatch();
-  const { friends } = useSelector((state) => state.friend);
 
-  const handleChooseActiveConversation = (id, name) => {
-    dispatch(setChosenChatDetails({ id, name }));
+  const { chatRooms } = useSelector((state) => state.chat);
+
+  const handleChooseActiveConversation = (id, name, participants) => {
+    dispatch(setChosenChatDetails({ id, name, participants }));
   };
 
   return (
@@ -26,7 +27,7 @@ const MessageListBox = ({ isOpen, onClick = () => {} }) => {
         </span>
       </p>
       <div className="px-[10px] max-h-[300px] overflow-x-auto">
-        {friends.length === 0 && (
+        {chatRooms.length === 0 && (
           <div className="text-center w-full px-[10px] py-[15px]">
             <SentimentVeryDissatisfiedIcon
               style={{
@@ -37,17 +38,23 @@ const MessageListBox = ({ isOpen, onClick = () => {} }) => {
             <div className="mt-[10px]">You don't have any message</div>
           </div>
         )}
-        {friends.map((fr) => (
-          <ChatList
-            key={fr.id}
-            fr={fr}
-            onClick={() => {
-              dispatch(setShowCardBox(true));
-              onClick(false);
-              handleChooseActiveConversation(fr.id, fr.username);
-            }}
-          ></ChatList>
-        ))}
+        {chatRooms?.map((room) => {
+          return (
+            <ChatList
+              key={room?._id}
+              room={room}
+              onClick={() => {
+                dispatch(setShowCardBox(true));
+                onClick(false);
+                handleChooseActiveConversation(
+                  room?._id,
+                  room?.participants[1].name,
+                  room.participants
+                );
+              }}
+            ></ChatList>
+          );
+        })}
       </div>
     </div>
   );

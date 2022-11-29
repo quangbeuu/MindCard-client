@@ -5,6 +5,7 @@ import {
   setCardStudied,
   setNoCardStudied,
 } from "../store/card/slice";
+import { setChatRooms, setMessages } from "../store/chat/slice";
 import {
   setFriends,
   setOnlineUsers,
@@ -13,6 +14,7 @@ import {
 
 import { setPendingMemberInvitations } from "../store/member/memberSlice";
 import { updateDirectChatHistoryIfActive } from "../utils/chat";
+import * as videoHander from "./videoHander";
 
 let socket = null;
 
@@ -59,8 +61,15 @@ export const connectWithSocketServer = (user, dispatch) => {
     dispatch(setOnlineUsers(onlineUsers));
   });
 
+  socket.on("rooms-lists", (data) => {
+    const { rooms } = data;
+
+    dispatch(setChatRooms(rooms));
+  });
+
   socket.on("direct-chat-history", (data) => {
     updateDirectChatHistoryIfActive(data);
+    dispatch(setMessages(data.messages));
   });
 
   socket.on("sendCardToClient", (data) => {
@@ -77,6 +86,11 @@ export const connectWithSocketServer = (user, dispatch) => {
 
   socket.on("sendNotStudiedCardToClient", (data) => {
     dispatch(setNoCardStudied(data));
+  });
+
+  // video
+  socket.on("room-create", (data) => {
+    videoHander.newRoomCreated(data);
   });
 };
 
@@ -108,11 +122,13 @@ export const getNotStudied = (setId) => {
 
 // Chat
 export const sendDirectMessage = (data) => {
-  console.log(data);
   socket?.emit("direct-message", data);
 };
 
 export const getDirectChatHistory = (data) => {
-  console.log(data);
   socket?.emit("direct-chat-history", data);
+};
+
+export const createNewRoom = () => {
+  socket?.emit("room-create");
 };

@@ -11,9 +11,12 @@ const CheckMailPage = () => {
       subHeader="We sent a password reset link to your email."
     >
       <form className="mt-[20px]">
-        <ButtonSubmit className="mt-4">
-          <a href="https://mail.google.com">Open email app</a>
-        </ButtonSubmit>
+        <a
+          href="https://mail.google.com"
+          className={`px-[15px] py-[10px] bg-[#90b498] color-white flex items-center justify-center w-full text-white text-lg mt-[40px] rounded-md mb-[30px]`}
+        >
+          Open email app
+        </a>
       </form>
     </ResetLayout>
   );

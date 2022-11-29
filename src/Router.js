@@ -36,24 +36,24 @@ const Router = () => {
       {/* Làm trang Error 404 */}
       <Route path="*" element={<ErrorPage></ErrorPage>}></Route>
       <Route path="/home" element={<HomePage></HomePage>}></Route>
-      {!isLogin && (
-        <>
-          <Route path="/sign-up" element={<SignUpPage></SignUpPage>}></Route>
-          <Route path="/sign-in" element={<SignInPage></SignInPage>}></Route>
-          <Route
-            path="/forgotPassword"
-            element={<ForgotPasswordPage></ForgotPasswordPage>}
-          ></Route>
-          <Route
-            path="/checkMail"
-            element={<CheckMailPage></CheckMailPage>}
-          ></Route>
-          <Route
-            path="/setNewPassword"
-            element={<SetNewPasswordPage></SetNewPasswordPage>}
-          ></Route>
-        </>
-      )}
+
+      <>
+        <Route path="/sign-up" element={<SignUpPage></SignUpPage>}></Route>
+        <Route path="/sign-in" element={<SignInPage></SignInPage>}></Route>
+        <Route
+          path="/forgotPassword"
+          element={<ForgotPasswordPage></ForgotPasswordPage>}
+        ></Route>
+        <Route
+          path="/checkMail"
+          element={<CheckMailPage></CheckMailPage>}
+        ></Route>
+        <Route
+          path="/setNewPassword"
+          element={<SetNewPasswordPage></SetNewPasswordPage>}
+        ></Route>
+      </>
+
       {isLogin && (
         <>
           <Route path="/profile" element={<UserProfile></UserProfile>}></Route>

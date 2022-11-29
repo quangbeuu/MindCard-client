@@ -4,7 +4,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { useDispatch } from "react-redux";
 import { setShowInvitationBox } from "../../store/show/showSlice";
 
-const FriendInvitation = () => {
+const FriendInvitation = ({ className = "" }) => {
   const dispatch = useDispatch();
 
   return (
@@ -13,7 +13,9 @@ const FriendInvitation = () => {
         dispatch(setShowInvitationBox(true));
       }}
     >
-      <PersonAddIcon className="w-5 h-5 text-[#ffffff] hover:opacity-[0.5] cursor-pointer"></PersonAddIcon>
+      <PersonAddIcon
+        className={`w-5 h-5 text-[#586380] hover:opacity-[0.5] cursor-pointer ${className}`}
+      ></PersonAddIcon>
     </div>
   );
 };

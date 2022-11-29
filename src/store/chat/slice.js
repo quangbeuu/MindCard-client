@@ -1,13 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const cardSlice = createSlice({
+const chatSlice = createSlice({
   name: "chat",
   initialState: {
+    chatRooms: [],
     chosenChatDetails: {},
     chatType: "",
     messages: [],
   },
   reducers: {
+    setChatRooms: (state, action) => ({
+      ...state,
+      chatRooms: action.payload,
+    }),
     setChosenChatDetails: (state, action) => ({
       ...state,
       chosenChatDetails: action.payload,
@@ -23,7 +28,7 @@ const cardSlice = createSlice({
   },
 });
 
-export const { setChosenChatDetails, setChatType, setMessages } =
-  cardSlice.actions;
+export const { setChosenChatDetails, setChatType, setMessages, setChatRooms } =
+  chatSlice.actions;
 
-export default cardSlice.reducer;
+export default chatSlice.reducer;

@@ -1,11 +1,10 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import MessageItem from "./MessageItem";
 
 const BoxChatContent = () => {
   const { messages } = useSelector((state) => state.chat);
 
-  console.log(messages);
   // Hàm chuyển định dạng ngày tháng năm
   const convertDateToHumanReadable = (date, format) => {
     const map = {
