@@ -12,7 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuthStateChanged from "../../../hooks/useAuthStateChanged";
-import { domain } from "../../../firebase.config";
+import { domain } from "../../../utils/common";
 
 const TestQuestionList = () => {
   const { testId, setId } = useParams();

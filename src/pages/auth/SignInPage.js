@@ -11,7 +11,7 @@ import {
   GoogleAuthProvider,
   FacebookAuthProvider,
 } from "firebase/auth";
-import { auth, domain } from "../../firebase.config";
+import { auth } from "../../firebase.config";
 import { Link, useNavigate } from "react-router-dom";
 import { ButtonSocial, ButtonSubmit } from "../../components/button";
 
@@ -31,6 +31,7 @@ import {
 } from "../../components/layout/auth/index";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { domain } from "../../utils/common";
 
 const SignInPage = () => {
   const { value: open, handleToggleValue: handleToggleEyeIcon } =
@@ -79,13 +80,10 @@ const SignInPage = () => {
     console.log(values);
     if (isValid) {
       try {
-        const user = await axios.post(
-          "http://localhost:3000/api/v1/users/login",
-          {
-            email: values.email,
-            password: values.password,
-          }
-        );
+        const user = await axios.post(`${domain}/api/v1/users/login`, {
+          email: values.email,
+          password: values.password,
+        });
         // console.log(user);
         handleAlert();
         if (user) {

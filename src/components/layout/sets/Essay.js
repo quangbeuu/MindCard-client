@@ -3,9 +3,10 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import essay from "../../../assets/img/typeTest/essay.png";
-import { domain } from "../../../firebase.config";
+
 import useAuthStateChanged from "../../../hooks/useAuthStateChanged";
 import { setQuestions, setTest } from "../../../store/test/testSlice";
+import { domain } from "../../../utils/common";
 
 const Essay = ({ questionEssay }) => {
   const navigate = useNavigate();
@@ -21,14 +22,11 @@ const Essay = ({ questionEssay }) => {
         set: setId,
       });
       const testId = test.data.data.tests._id;
-      const question = await axios.post(
-        "http://localhost:3000/api/v1/questions",
-        {
-          questionEssay,
-          testId: testId,
-          type: "essay",
-        }
-      );
+      const question = await axios.post(`${domain}/api/v1/questions`, {
+        questionEssay,
+        testId: testId,
+        type: "essay",
+      });
       console.log(question);
       dispatch(setQuestions(question.data.data.questions));
       dispatch(setTest(test.data.data.tests));

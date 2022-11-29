@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { domain } from "../../utils/common";
 
 import { ButtonModal } from "../button";
 import SetOption from "./SetOption";
@@ -9,7 +10,7 @@ const SetModal = () => {
   const navigate = useNavigate();
   const handleClick = async () => {
     try {
-      const sets = await axios.post("http://localhost:3000/api/v1/sets", {
+      const sets = await axios.post(`${domain}/api/v1/sets`, {
         name: "Test Set",
       });
 

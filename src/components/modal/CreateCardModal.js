@@ -92,7 +92,7 @@ const CreateCardModal = ({ closeModel }) => {
         // console.log(cardData);
         // try {
         //   const card = await axios.post(
-        //     "http://localhost:3000/api/v1/cards",
+        //     `${domain}/api/v1/cards`,
         //     cardData
         //   );
 

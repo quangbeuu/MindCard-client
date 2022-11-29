@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuthStateChanged from "../../../hooks/useAuthStateChanged";
 import axios from "axios";
-import { domain } from "../../../firebase.config";
+import { domain } from "../../../utils/common";
 
 const TestEssayList = () => {
   const { testId, setId } = useParams();

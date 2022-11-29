@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ButtonSubmit } from "../components/button";
+import { domain } from "../utils/common";
 const ForgotPasswordPage = () => {
   let navigate = useNavigate();
   const schema = yup.object({
@@ -30,12 +31,9 @@ const ForgotPasswordPage = () => {
   const onSubmitHandler = async (values) => {
     if (isValid) {
       try {
-        const res = await axios.post(
-          "http://localhost:3000/api/v1/users/forgotPassword",
-          {
-            email: values.email,
-          }
-        );
+        const res = await axios.post(`${domain}/api/v1/users/forgotPassword`, {
+          email: values.email,
+        });
 
         if (res) {
           navigate("/checkMail");

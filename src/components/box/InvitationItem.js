@@ -11,6 +11,7 @@ import {
   setShowAlert,
   setType,
 } from "../../store/alert/alertSlice";
+import { domain } from "../../utils/common";
 const InvitationItem = ({ invitation }) => {
   console.log(invitation);
   const { name, avatarUrl } = invitation.senderId;
@@ -18,12 +19,9 @@ const InvitationItem = ({ invitation }) => {
 
   const acceptInvitation = async () => {
     try {
-      await axios.post(
-        `http://localhost:3000/api/v1/friend-invitation/accept`,
-        {
-          id: invitation._id,
-        }
-      );
+      await axios.post(`${domain}/api/v1/friend-invitation/accept`, {
+        id: invitation._id,
+      });
       dispatch(setShowAlert(true));
       dispatch(setMessage("Accept successfully"));
       dispatch(setType("success"));
@@ -37,12 +35,9 @@ const InvitationItem = ({ invitation }) => {
   const rejectInvitation = async () => {
     try {
       try {
-        await axios.post(
-          `http://localhost:3000/api/v1/friend-invitation/reject`,
-          {
-            id: invitation._id,
-          }
-        );
+        await axios.post(`${domain}/api/v1/friend-invitation/reject`, {
+          id: invitation._id,
+        });
         dispatch(setShowAlert(true));
         dispatch(setMessage("Reject successfully"));
         dispatch(setType("success"));

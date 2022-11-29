@@ -10,6 +10,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import useAuthStateChanged from "../../hooks/useAuthStateChanged";
+import { domain } from "../../utils/common";
 
 const ClassModal = () => {
   const { imageCover, getImageUrl } = useGetImageUrl();
@@ -33,18 +34,15 @@ const ClassModal = () => {
   const onSubmitHandler = async (values) => {
     if (isValid) {
       try {
-        const newClass = await axios.post(
-          "http://localhost:3000/api/v1/class",
-          {
-            name: values.classname,
-            description: values.description,
-            imageCover:
-              imageCover ||
-              "https://images.unsplash.com/photo-1472289065668-ce650ac443d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80",
-            createdBy: user._id,
-            member: user._id,
-          }
-        );
+        const newClass = await axios.post(`${domain}/api/v1/class`, {
+          name: values.classname,
+          description: values.description,
+          imageCover:
+            imageCover ||
+            "https://images.unsplash.com/photo-1472289065668-ce650ac443d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80",
+          createdBy: user._id,
+          member: user._id,
+        });
 
         const { _id: classId } = newClass.data.data.classes;
 

@@ -8,8 +8,9 @@ import ResetLayout from "../components/layout/ResetLayout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
-import { domain } from "../firebase.config";
+
 import { useNavigate } from "react-router-dom";
+import { domain } from "../utils/common";
 
 const SetNewPasswordPage = () => {
   let navigate = useNavigate();

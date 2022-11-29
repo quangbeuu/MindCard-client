@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import multipleChoice from "../../../assets/img/typeTest/multiple-choice.png";
 import useAuthStateChanged from "../../../hooks/useAuthStateChanged";
 import { setQuestions, setTest } from "../../../store/test/testSlice";
+import { domain } from "../../../utils/common";
 const MultipleChoice = ({ questionMulty }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -13,21 +14,18 @@ const MultipleChoice = ({ questionMulty }) => {
   const { user } = useAuthStateChanged();
   const handleCreateTest = async () => {
     try {
-      const test = await axios.post("http://localhost:3000/api/v1/test", {
+      const test = await axios.post(`${domain}/api/v1/test`, {
         type: "multiple-choice",
         user: user._id,
         set: setId,
       });
 
       const testId = test.data.data.tests._id;
-      const question = await axios.post(
-        "http://localhost:3000/api/v1/questions",
-        {
-          questionMulty,
-          testId: test.data.data.tests._id,
-          type: "multiple-choice",
-        }
-      );
+      const question = await axios.post(`${domain}/api/v1/questions`, {
+        questionMulty,
+        testId: test.data.data.tests._id,
+        type: "multiple-choice",
+      });
 
       dispatch(setQuestions(question.data.data.questions));
       dispatch(setTest(test.data.data.tests));

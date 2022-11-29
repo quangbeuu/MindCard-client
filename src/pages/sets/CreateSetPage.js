@@ -24,9 +24,10 @@ import { InputModal } from "../../components/input";
 import { CreateCardModal, Modal } from "../../components/modal";
 import CardDemo from "../../components/item/CardDemo";
 import axios from "axios";
-import { domain } from "../../firebase.config";
+
 import useAuthStateChanged from "../../hooks/useAuthStateChanged";
 import slugify from "react-slugify";
+import { domain } from "../../utils/common";
 
 const CreateSetPage = () => {
   const navigate = useNavigate();

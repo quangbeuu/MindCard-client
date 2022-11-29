@@ -23,6 +23,7 @@ import FriendInvitation from "../box/FriendInvitation";
 import MessageList from "../box/MessageList";
 import { InputModal } from "../input";
 import { setShowInvitationBox } from "../../store/show/showSlice";
+import { domain } from "../../utils/common";
 
 const ListLink = [
   {
@@ -69,7 +70,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:3000/api/v1/users/logout");
+      await axios.get(`${domain}/api/v1/users/logout`);
       // refresh lại trang
       navigate(0);
     } catch (err) {
@@ -89,7 +90,7 @@ const Header = () => {
 
   const goToSetPage = async () => {
     try {
-      const sets = await axios.post("http://localhost:3000/api/v1/sets", {
+      const sets = await axios.post(`${domain}/api/v1/sets`, {
         name: "Test Set",
       });
 
@@ -111,12 +112,9 @@ const Header = () => {
   const onSubmitHandler = async (values) => {
     if (isValid) {
       try {
-        await axios.post(
-          `http://localhost:3000/api/v1/friend-invitation/invite`,
-          {
-            targetMailAddress: values.email,
-          }
-        );
+        await axios.post(`${domain}/api/v1/friend-invitation/invite`, {
+          targetMailAddress: values.email,
+        });
 
         dispatch(setShowInvitationBox(false));
         setShowInvitationBox(false);

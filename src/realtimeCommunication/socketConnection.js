@@ -14,13 +14,14 @@ import {
 
 import { setPendingMemberInvitations } from "../store/member/memberSlice";
 import { updateDirectChatHistoryIfActive } from "../utils/chat";
+import { domain } from "../utils/common";
 import * as videoHander from "./videoHander";
 
 let socket = null;
 
 export const connectWithSocketServer = (user, dispatch) => {
   // Kết nối socket.io bên server
-  socket = io("http://localhost:3000", {
+  socket = io(`${domain}`, {
     // Truyền dữ liệu ng dùng sang backend
     auth: { user },
   });

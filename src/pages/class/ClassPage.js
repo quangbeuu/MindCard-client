@@ -30,6 +30,7 @@ import {
 import { InputModal } from "../../components/input/index";
 import { Modal, SetModal } from "../../components/modal/index";
 import { ButtonModal } from "../../components/button";
+import { domain } from "../../utils/common";
 
 const ClassPage = () => {
   // Lấy params id của url
@@ -77,7 +78,7 @@ const ClassPage = () => {
     if (isValid) {
       try {
         await axios.post(
-          `http://localhost:3000/api/v1/class/${classId}/member-invitation/invite`,
+          `${domain}/api/v1/class/${classId}/member-invitation/invite`,
           {
             targetMailAddress: values.email,
           }

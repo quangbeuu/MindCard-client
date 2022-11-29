@@ -16,6 +16,7 @@ import {
   AuthRight,
   HaveAccount,
 } from "../../components/layout/auth/index";
+import { domain } from "../../utils/common";
 
 const SignUpPage = () => {
   const { value: open, handleToggleValue: handleToggleEyeIcon } =
@@ -55,7 +56,7 @@ const SignUpPage = () => {
     // values: dữ liệu trong form
     if (isValid) {
       try {
-        await axios.post("http://localhost:3000/api/v1/users/signup", {
+        await axios.post(`${domain}/api/v1/users/signup`, {
           name: values.username,
           email: values.email,
           password: values.password,
