@@ -21,7 +21,7 @@ let socket = null;
 
 export const connectWithSocketServer = (user, dispatch) => {
   // Kết nối socket.io bên server
-  socket = io(`${domain}`, {
+  socket = io(`http://localhost:3000`, {
     // Truyền dữ liệu ng dùng sang backend
     auth: { user },
   });
@@ -93,6 +93,11 @@ export const connectWithSocketServer = (user, dispatch) => {
   socket.on("room-create", (data) => {
     videoHander.newRoomCreated(data);
   });
+
+  socket.on("active-rooms", (data) => {
+    console.log(data);
+    videoHander.updateActiveRooms(data);
+  });
 };
 
 export const createCard = (data) => {
@@ -132,4 +137,12 @@ export const getDirectChatHistory = (data) => {
 
 export const createNewRoom = () => {
   socket?.emit("room-create");
+};
+
+export const joinVideoCall = (data) => {
+  socket?.emit("room-join", data);
+};
+
+export const leaveRoom = (data) => {
+  socket?.emit("room-leave", data);
 };

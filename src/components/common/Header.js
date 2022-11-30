@@ -24,6 +24,7 @@ import MessageList from "../box/MessageList";
 import { InputModal } from "../input";
 import { setShowInvitationBox } from "../../store/show/showSlice";
 import { domain } from "../../utils/common";
+import VideoList from "../box/VideoList";
 
 const ListLink = [
   {
@@ -176,6 +177,7 @@ const Header = () => {
             <>
               <FriendInvitation></FriendInvitation>
               <MessageList></MessageList>
+              <VideoList></VideoList>
               <Notification></Notification>
               <SmallButton
                 className="bg-[#ffcd1f] hover:bg-[#ffdc62]"

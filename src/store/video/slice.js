@@ -12,7 +12,7 @@ const videoSlice = createSlice({
     activeRooms: [],
 
     // 4. Luồng cục bộ
-    localStream: null,
+    localStream: {},
     // 5. Luồng từ xa
     remoteStreams: [],
 
@@ -34,9 +34,18 @@ const videoSlice = createSlice({
       ...state,
       roomDetails: action.payload,
     }),
+    setActiveRooms: (state, action) => ({
+      ...state,
+      activeRooms: action.payload,
+    }),
+    setLocalStream: (state, action) => ({
+      ...state,
+      localStream: action.payload,
+    }),
   },
 });
 
-export const { setOpenRoom, setRoomDetails } = videoSlice.actions;
+export const { setOpenRoom, setRoomDetails, setActiveRooms, setLocalStream } =
+  videoSlice.actions;
 
 export default videoSlice.reducer;
