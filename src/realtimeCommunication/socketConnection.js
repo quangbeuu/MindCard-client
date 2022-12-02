@@ -16,6 +16,7 @@ import { setPendingMemberInvitations } from "../store/member/memberSlice";
 import { updateDirectChatHistoryIfActive } from "../utils/chat";
 import { domain } from "../utils/common";
 import * as videoHander from "./videoHander";
+import * as webRTCHandler from "./webRTCHandler";
 
 let socket = null;
 
@@ -95,8 +96,30 @@ export const connectWithSocketServer = (user, dispatch) => {
   });
 
   socket.on("active-rooms", (data) => {
-    console.log(data);
     videoHander.updateActiveRooms(data);
+  });
+
+  socket.on("conn-prepare", (data) => {
+    // 1. Chuẩn bị kết nối peer-to-peer
+    const { connUserSocketId } = data;
+
+    webRTCHandler.prepareNewPeerConnection(connUserSocketId, false);
+
+    socket.emit("conn-init", { connUserSocketId: connUserSocketId });
+  });
+
+  socket.on("conn-init", (data) => {
+    const { connUserSocketId } = data;
+    webRTCHandler.prepareNewPeerConnection(connUserSocketId, true);
+  });
+
+  socket.on("conn-signal", (data) => {
+    webRTCHandler.handleSignalingData(data);
+  });
+
+  socket.on("room-participant-left", (data) => {
+    console.log("user left room", data);
+    webRTCHandler.handleParticipantLeftRoom(data);
   });
 };
 
@@ -145,4 +168,8 @@ export const joinVideoCall = (data) => {
 
 export const leaveRoom = (data) => {
   socket?.emit("room-leave", data);
+};
+
+export const signalPeerData = (data) => {
+  socket?.emit("conn-signal", data);
 };

@@ -2,11 +2,18 @@ import React from "react";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowCardBox } from "../../store/show/showSlice";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { setAudioOnly } from "../../store/video/slice";
 
 const BoxChatHeader = () => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
   const dispatch = useDispatch();
   const { friends, onlineUsers } = useSelector((state) => state.friend);
   const { chosenChatDetails } = useSelector((state) => state.chat);
+  const { audioOnly } = useSelector((state) => state.video);
 
   const checkOnlineUsers = (friends = [], onlineUsers = []) => {
     return friends.map((f) => {
@@ -16,8 +23,18 @@ const BoxChatHeader = () => {
     });
   };
 
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleAudioOnlyChange = () => {
+    dispatch(setAudioOnly(!audioOnly));
+  };
   return (
-    <div className="p-[20px] bg-[#4a8063] max-h-[120px] h-full rounded-t-lg flex justify-between flex-none ">
+    <div className="p-[20px] bg-[#4a8063] max-h-[130px] h-full rounded-t-lg flex justify-between flex-none ">
       <div className="">
         <p className="text-white font-semibold text-[16px]">
           {chosenChatDetails?.name}
@@ -25,6 +42,7 @@ const BoxChatHeader = () => {
         <p className="text-white font-sm">
           {chosenChatDetails?.participants?.length} Member
         </p>
+
         <div className="mt-[8px] grid grid-cols-5 gap-[10px] items-center">
           {/* <div className="relative">
             <img
@@ -48,14 +66,27 @@ const BoxChatHeader = () => {
               </div>
             )
           )}
-
-          {/* <div>
-            <img
-              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-              alt="chao"
-              className="w-[35px] h-[35px] rounded-full object-cover"
-            />
-          </div> */}
+          <div>
+            <IconButton onClick={handleMenuOpen} style={{ color: "white" }}>
+              <SettingsIcon />
+            </IconButton>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleMenuClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem
+                style={{ fontSize: "14px" }}
+                onClick={handleAudioOnlyChange}
+              >
+                {audioOnly ? "Audio Only Enabled" : "Audio Only Disabled"}
+              </MenuItem>
+            </Menu>
+          </div>
         </div>
       </div>
       <div

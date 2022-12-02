@@ -12,7 +12,7 @@ const videoSlice = createSlice({
     activeRooms: [],
 
     // 4. Luồng cục bộ
-    localStream: {},
+    localStream: null,
     // 5. Luồng từ xa
     remoteStreams: [],
 
@@ -20,6 +20,7 @@ const videoSlice = createSlice({
 
     screenSharingStream: null,
     isScreenSharingActive: false,
+    isUserJoinedWithOnlyAudio: false,
   },
 
   reducers: {
@@ -42,10 +43,39 @@ const videoSlice = createSlice({
       ...state,
       localStream: action.payload,
     }),
+    setAudioOnly: (state, action) => ({
+      ...state,
+      audioOnly: action.payload,
+    }),
+    setRemoteStream: (state, action) => ({
+      ...state,
+      remoteStreams: action.payload,
+    }),
+    setScreenSharingStream: (state, action) => {
+      console.log("action", action);
+      return {
+        ...state,
+        isScreenSharingActive: action.payload ? true : false,
+        screenSharingStream: action.payload || null,
+      };
+    },
+
+    setIsUserJoinedWithOnlyAudio: (state, action) => ({
+      ...state,
+      isUserJoinedWithOnlyAudio: action.payload,
+    }),
   },
 });
 
-export const { setOpenRoom, setRoomDetails, setActiveRooms, setLocalStream } =
-  videoSlice.actions;
+export const {
+  setOpenRoom,
+  setRoomDetails,
+  setActiveRooms,
+  setLocalStream,
+  setAudioOnly,
+  setRemoteStream,
+  setScreenSharingStream,
+  setIsUserJoinedWithOnlyAudio,
+} = videoSlice.actions;
 
 export default videoSlice.reducer;

@@ -6,11 +6,15 @@ import EmojiPicker from "emoji-picker-react";
 import VideocamRoundedIcon from "@mui/icons-material/VideocamRounded";
 
 import * as videoHandler from "../../realtimeCommunication/videoHander";
+import { useSelector } from "react-redux";
+
 const BoxChatInput = ({
   onChange = () => {},
   onKeyDown = () => {},
   value = "",
 }) => {
+  const { isUserInRoom } = useSelector((state) => state.video);
+
   const createVideoRoomHandler = () => {
     videoHandler.createNewRoom();
   };
@@ -25,10 +29,12 @@ const BoxChatInput = ({
         onKeyDown={onKeyDown}
       />
       {/* <EmojiPicker></EmojiPicker> */}
+
       <VideocamRoundedIcon
         className="ml-[10px]"
-        onClick={createVideoRoomHandler}
+        onClick={isUserInRoom ? () => {} : createVideoRoomHandler}
       ></VideocamRoundedIcon>
+
       <SentimentSatisfiedAltIcon className="ml-[10px]"></SentimentSatisfiedAltIcon>
       <SendIcon className="ml-[10px]"></SendIcon>
     </div>
