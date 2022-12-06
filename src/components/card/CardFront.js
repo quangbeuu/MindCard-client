@@ -3,7 +3,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { useSelector } from "react-redux";
 
 const CardFront = ({ onClick, cardInfo, index }) => {
-  const { cardListReal } = useSelector((state) => state.card);
+  const { cardList } = useSelector((state) => state.card);
 
   return (
     <div
@@ -14,7 +14,7 @@ const CardFront = ({ onClick, cardInfo, index }) => {
         <p className="text-[16px] text-[#939bb4] font-semibold">Term</p>
         <div className="text-[16px] text-[#586380] font-semibold">{`${
           index + 1
-        }/${cardListReal.length}`}</div>
+        }/${cardList.length}`}</div>
         <div className="p-2 hover:bg-[#eceff4] rounded-full transition-all linear duration-75">
           <StarIcon className="w-5 h-5 text-[#586380]"></StarIcon>
         </div>

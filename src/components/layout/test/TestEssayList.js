@@ -18,7 +18,6 @@ const TestEssayList = () => {
   const { user } = useAuthStateChanged();
   const navigate = useNavigate();
   const { test } = useSelector((state) => state.test);
-  const timeOfTestCreate = moment(test.createdAt);
 
   const a = test?.questions?.map((el, index) => {
     return `question${index + 1}`;
@@ -58,15 +57,13 @@ const TestEssayList = () => {
       };
     });
     const score = answer.filter((asn) => asn.isCorrect === true).length;
-    const timeFinisth = moment(Date.now());
 
-    const duration = timeFinisth.diff(timeOfTestCreate, "minutes");
     const data = {
       testId,
       score,
       user: user._id,
       userAnswers: answer,
-      duration,
+      duration: 1,
     };
 
     if (isValid) {

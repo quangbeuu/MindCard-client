@@ -7,6 +7,7 @@ const showSlice = createSlice({
     showCardBox: false,
     showInvitationBox: false,
     showMessageListBox: false,
+    showCreateCard: false,
   },
   reducers: {
     setShowTestModel: (state, action) => ({
@@ -29,6 +30,10 @@ const showSlice = createSlice({
       ...state,
       showMessageListBox: action.payload,
     }),
+    setShowCreateCard: (state, action) => ({
+      ...state,
+      showCreateCard: action.payload,
+    }),
   },
 });
 
@@ -38,6 +43,7 @@ export const {
   setShowCardBox,
   setShowInvitationBox,
   setShowMessageListBox,
+  setShowCreateCard,
 } = showSlice.actions;
 
 export default showSlice.reducer;

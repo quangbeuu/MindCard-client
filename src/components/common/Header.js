@@ -26,24 +26,6 @@ import { setShowInvitationBox } from "../../store/show/showSlice";
 import { domain } from "../../utils/common";
 import VideoList from "../box/VideoList";
 
-const ListLink = [
-  {
-    id: 1,
-    to: "#",
-    title: "Home",
-  },
-  {
-    id: 2,
-    to: "#",
-    title: "Dic",
-  },
-  {
-    id: 3,
-    to: "#",
-    title: "About us",
-  },
-];
-
 const Header = () => {
   const { value: show, handleToggleValue: handleIconClick } = useToggleValue();
   const { showInvitationBox } = useSelector((state) => state.show);
@@ -53,6 +35,24 @@ const Header = () => {
   console.log("isLogin", isLogin);
 
   // const [showModal, setShowModal] = useState(false);
+
+  const ListLink = [
+    {
+      id: 1,
+      to: "#",
+      title: "Home",
+    },
+    {
+      id: 2,
+      to: `/schedule/${user?._id}`,
+      title: "Schedule",
+    },
+    {
+      id: 3,
+      to: "#",
+      title: "About us",
+    },
+  ];
 
   let navigate = useNavigate();
 
@@ -96,8 +96,9 @@ const Header = () => {
       });
 
       const setId = sets.data.data.sets._id;
-
-      navigate(`/createSet/${setId}`);
+      if (sets) {
+        navigate(`/createSet/${setId}`);
+      }
     } catch (err) {
       console.log(err);
     }

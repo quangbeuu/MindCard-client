@@ -5,7 +5,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import { useParams } from "react-router-dom";
 
 const AnswerUserItem = ({ result }) => {
-  console.log(result);
   const { type } = useParams();
   console.log(type);
 
@@ -39,6 +38,9 @@ const AnswerUserItem = ({ result }) => {
           <div className="mt-[18px] text-[#ff983a] font-semibold">
             YOUR ANSWER
           </div>
+          <div className="flex items-center gap-[10px] mt-[10px]">
+            <div className="text-[16px]">{result?.userAnswer}</div>
+          </div>
         </div>
       )}
 
@@ -48,7 +50,7 @@ const AnswerUserItem = ({ result }) => {
         </div>
         <div className="flex items-center gap-[10px] mt-[10px]">
           <CheckIcon></CheckIcon>
-          <div className="text-[16px]">{result.correctAnswer}</div>
+          <div className="text-[16px]">{result?.correctAnswer}</div>
         </div>
       </div>
     </div>

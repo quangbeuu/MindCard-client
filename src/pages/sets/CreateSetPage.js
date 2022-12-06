@@ -78,9 +78,16 @@ const CreateSetPage = () => {
 
   const onSubmitHandler = async (values) => {
     if (isValid) {
-      console.log(values);
       try {
         if (imageCover) {
+          console.log({
+            name: values.setname,
+            description: values.description,
+            createdBy: user._id,
+            numCards: cardList.length,
+            image: imageCover,
+            slug: slugify(values.setname),
+          });
           const sets = await axios.patch(`${domain}/api/v1/sets/${setId}`, {
             name: values.setname,
             description: values.description,

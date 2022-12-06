@@ -1,9 +1,12 @@
 import React from "react";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
+
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setShowCreateCard } from "../../../store/show/showSlice";
+import { setCardInfo } from "../../../store/card/slice";
 const CreatedBy = () => {
+  const dispatch = useDispatch();
   const { setInfo } = useSelector((state) => state.set);
 
   return (
@@ -22,12 +25,16 @@ const CreatedBy = () => {
         </div>
       </div>
       <div className="flex">
-        <div className="w-[38px] h-[38px] bg-white hover:bg-[#edeff4] text-[20px] flex items-center justify-center rounded-full border-[2px] solid border-[#d9dde8] text-[#646f90] font-bold transition duration-100ms ease-in ml-[10px] cursor-pointer">
+        <div
+          onClick={() => {
+            dispatch(setCardInfo(null));
+            dispatch(setShowCreateCard(true));
+          }}
+          className="w-[38px] h-[38px] bg-white hover:bg-[#edeff4] text-[20px] flex items-center justify-center rounded-full border-[2px] solid border-[#d9dde8] text-[#646f90] font-bold transition duration-100ms ease-in ml-[10px] cursor-pointer"
+        >
           <AddRoundedIcon className="text-[40px]" />
         </div>
-        <div className="w-[38px] h-[38px] bg-white hover:bg-[#edeff4] text-[20px] flex items-center justify-center rounded-full border-[2px] solid border-[#d9dde8] text-[#646f90] font-bold transition duration-100ms ease-in ml-[10px] cursor-pointer">
-          <FolderOpenOutlinedIcon className="text-[40px]" />
-        </div>
+
         <div className="w-[38px] h-[38px] bg-white hover:bg-[#edeff4] text-[20px] flex items-center justify-center rounded-full border-[2px] solid border-[#d9dde8] text-[#646f90] font-bold transition duration-100ms ease-in ml-[10px] cursor-pointer">
           <MoreHorizOutlinedIcon className="text-[40px]" />
         </div>

@@ -16,6 +16,7 @@ import CardDetails from "../components/card/CardDetails";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import {
+  connectWithSocketServer,
   getCard,
   getNotStudied,
   getStudied,
@@ -24,22 +25,55 @@ import {
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSetInfo } from "../store/set/slice";
-import { Modal } from "../components/modal";
-import { setShowReview, setShowTestModel } from "../store/show/showSlice";
+import { CreateCardModal, Modal } from "../components/modal";
+import {
+  setShowCreateCard,
+  setShowReview,
+  setShowTestModel,
+} from "../store/show/showSlice";
 import TypeTestModal from "../components/modal/TypeTestModal";
 import ReviewModal from "../components/modal/ReviewModal";
+import { getCardList } from "../store/card/slice";
+import useAuthStateChanged from "../hooks/useAuthStateChanged";
 
 const SetPage = () => {
   const { setId } = useParams();
+  const dispatch = useDispatch();
   const [swiper, setSwiper] = React.useState();
   const prevRef = React.useRef();
   const nextRef = React.useRef();
-  const { cardListReal, cardStudied } = useSelector((state) => state.card);
+  const { user } = useAuthStateChanged();
+
+  useEffect(() => {
+    connectWithSocketServer(user, dispatch);
+  }, [user, dispatch]);
+
+  const { cardList } = useSelector((state) => state.card);
   const { cardShow } = useSelector((state) => state.cardDetail);
-  const { showTestModel, showReview } = useSelector((state) => state.show);
+  const { showTestModel, showReview, showCreateCard } = useSelector(
+    (state) => state.show
+  );
+
+  useEffect(() => {
+    joinSet(setId);
+  }, [setId]);
+
+  useEffect(() => {
+    dispatch(getCardList(setId));
+  }, [dispatch, setId]);
+
+  useEffect(() => {
+    getCard(setId);
+    getStudied(setId);
+    getNotStudied(setId);
+  }, [setId]);
+
+  useEffect(() => {
+    dispatch(getSetInfo(setId));
+  }, [dispatch, setId]);
 
   // B1: Lấy tất cả các từ vựng tiếng việt trong Card
-  const allWordVN = cardListReal.map((card) => {
+  const allWordVN = cardList?.map((card) => {
     return card.meaningUsers;
   });
 
@@ -62,7 +96,7 @@ const SetPage = () => {
     return [...arrayRandom, word];
   };
 
-  const questionMulty = cardListReal.map((card) => {
+  const questionMulty = cardList?.map((card) => {
     return {
       question: card.word,
       type: "multiple-choice",
@@ -71,7 +105,7 @@ const SetPage = () => {
     };
   });
 
-  const questionEssay = cardListReal.map((card) => {
+  const questionEssay = cardList?.map((card) => {
     return {
       question: card.word,
       type: "essay",
@@ -89,21 +123,6 @@ const SetPage = () => {
       swiper.navigation.update();
     }
   }, [swiper]);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    joinSet(setId);
-  }, [setId]);
-
-  useEffect(() => {
-    getCard(setId);
-    getStudied(setId);
-    getNotStudied(setId);
-  }, [setId]);
-
-  useEffect(() => {
-    dispatch(getSetInfo(setId));
-  }, [dispatch, setId]);
 
   return (
     <div>
@@ -125,7 +144,7 @@ const SetPage = () => {
                 onSlideChange={() => console.log("slide change")}
                 onSwiper={setSwiper}
               >
-                {cardListReal.map((card, index) => (
+                {cardList?.map((card, index) => (
                   <SwiperSlide key={card._id}>
                     <Card cardInfo={card} index={index}></Card>
                   </SwiperSlide>
@@ -148,9 +167,9 @@ const SetPage = () => {
               </Swiper>
             </div>
             <div className="h-[1px] bg-[#d9dde8] mt-[1rem] w-full"></div>
-            {cardStudied && <CreatedBy></CreatedBy>}
+            <CreatedBy></CreatedBy>
             <div className="font-bold text-[#303545] text-[20px] mt-[40px]">
-              Terms in this set ({cardListReal.length})
+              Terms in this set ({cardList?.length})
             </div>
             <NotStudied></NotStudied>
             <StillLearning></StillLearning>
@@ -178,6 +197,15 @@ const SetPage = () => {
         }}
       >
         <ReviewModal></ReviewModal>
+      </Modal>
+      <Modal
+        showModal={showCreateCard}
+        handleClose={() => dispatch(setShowCreateCard(false))}
+        title="Create a Flashcard"
+      >
+        <CreateCardModal
+          closeModel={() => dispatch(setShowCreateCard(false))}
+        ></CreateCardModal>
       </Modal>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import axios from "axios";
 
@@ -13,18 +13,20 @@ import * as yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuthStateChanged from "../../../hooks/useAuthStateChanged";
 import { domain } from "../../../utils/common";
+import {
+  setMessage,
+  setShowAlert,
+  setType,
+} from "../../../store/alert/alertSlice";
 
 const TestQuestionList = () => {
   const { testId, setId } = useParams();
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { test } = useSelector((state) => state.test);
 
   const { user } = useAuthStateChanged();
-
-  const timeOfTestCreate = moment(test.createdAt);
-  const minutesCreate =
-    timeOfTestCreate.hour() * 60 + timeOfTestCreate.minute();
 
   const a = test?.questions?.map((el, index) => {
     return `question${index + 1}`;
@@ -32,12 +34,12 @@ const TestQuestionList = () => {
 
   const b = a?.reduce((a, v) => ({ ...a, [v]: v }), {});
   const yubString = function (obj) {
-    if (obj) {
-      Object.keys(obj).forEach(function (key) {
-        obj[key] = yup.string().required("Please choose your answer.");
-      });
-      return obj;
-    }
+    // if (obj) {
+    //   Object.keys(obj).forEach(function (key) {
+    //     obj[key] = yup.string().required("Please choose your answer.");
+    //   });
+    //   return obj;
+    // }
   };
 
   const schema = yup.object(yubString(b));
@@ -48,6 +50,15 @@ const TestQuestionList = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    if (errors) {
+      dispatch(setShowAlert(true));
+      dispatch(setMessage("Please finish all questions in test."));
+      dispatch(setType("notice"));
+    }
+  }, [errors, dispatch]);
+
   const onSubmitHandler = async (values) => {
     const answer = Object.values(values).map((el, index) => {
       return {
@@ -60,16 +71,13 @@ const TestQuestionList = () => {
       };
     });
     const score = answer.filter((asn) => asn.isCorrect === true).length;
-    const timeFinisth = moment(Date.now());
-    const minutesFinish = timeFinisth.hour() * 60 + timeFinisth.minute();
-    const duration = minutesFinish - minutesCreate;
 
     const data = {
       testId,
       score,
       user: user._id,
       userAnswers: answer,
-      duration,
+      duration: 1,
     };
 
     if (isValid) {
@@ -80,7 +88,7 @@ const TestQuestionList = () => {
         );
 
         if (answerHistory) {
-          navigate(`/set/${setId}/result/${testId}`);
+          navigate(`/set/${setId}/result/${testId}/multiple-choice`);
         }
       } catch (err) {
         console.log(err);

@@ -13,6 +13,8 @@ import friendSlice from "./friend/friendSlice";
 import testSlice from "./test/testSlice";
 import resultSlice from "./results/slice";
 import videoSlice from "./video/slice";
+import scheduleSlice from "./schedule/scheduleSlice";
+import setOfUserSlice from "./setOfUser/slice";
 
 export const reducer = combineReducers({
   auth: authSlice,
@@ -28,4 +30,6 @@ export const reducer = combineReducers({
   test: testSlice,
   results: resultSlice,
   video: videoSlice,
+  schedule: scheduleSlice,
+  setOfUser: setOfUserSlice,
 });

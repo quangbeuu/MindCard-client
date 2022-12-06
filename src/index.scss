@@ -210,6 +210,9 @@ html {
   box-shadow: 0 0.25rem 1rem 0 rgba(48, 53, 69, 0.08);
 }
 
+.shadow-thin {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
 // Custom css cho thằng Swipper
 
 .swiper-button-next {
@@ -322,8 +325,22 @@ html {
   text-overflow: ellipsis;
 }
 
+.text-short2 {
+  max-width: 180px;
+  width: 100%;
+  display: block;
+  display: -webkit-box;
+  height: 14px * 1.3 * 1;
+  font-size: 18px;
+  line-height: 1.3;
+  -webkit-line-clamp: 1; /* số dòng hiển thị */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .active-question {
-  background-color: red;
+  border-color: #939bb4;
 }
 
 // Progress bar
@@ -334,4 +351,8 @@ html {
 
 .MuiLinearProgress-bar {
   background-color: #65c998 !important;
+}
+
+canvas {
+  height: 280px;
 }

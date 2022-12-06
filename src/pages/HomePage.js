@@ -1,7 +1,6 @@
 import React, { lazy } from "react";
-
-const Header = lazy(() => import("../components/common/Header"));
-const HomePoster = lazy(() => import("../components/home/HomePoster"));
+import Header from "../components/common/Header";
+import HomePoster from "../components/home/HomePoster";
 
 const HomePage = () => {
   return (

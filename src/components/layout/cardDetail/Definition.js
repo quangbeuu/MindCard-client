@@ -5,6 +5,7 @@ import LocalSeeOutlinedIcon from "@mui/icons-material/LocalSeeOutlined";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 
 const Definition = ({ cardDetail }) => {
+  const handleEditCardDetail = () => {};
   return (
     <div className="bg-white p-[40px] w-full rounded-xl flex">
       <div className="w-[30%]">
@@ -40,7 +41,10 @@ const Definition = ({ cardDetail }) => {
         <div className="mt-[10px] p-2 bg-[#efdcfe] text-[#8e61b2] rounded-full transition-all linear duration-75 cursor-pointer">
           <LocalSeeOutlinedIcon></LocalSeeOutlinedIcon>
         </div>
-        <div className="mt-[10px] p-2 bg-[#e2fff1] text-[#499670] rounded-full transition-all linear duration-75 cursor-pointer">
+        <div
+          className="mt-[10px] p-2 bg-[#e2fff1] text-[#499670] rounded-full transition-all linear duration-75 cursor-pointer"
+          onClick={handleEditCardDetail}
+        >
           <ModeEditOutlineOutlinedIcon></ModeEditOutlineOutlinedIcon>
         </div>
       </div>

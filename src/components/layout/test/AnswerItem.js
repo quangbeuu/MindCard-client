@@ -9,27 +9,20 @@ const AnswerItem = ({ option, index, control, name, value }) => {
     name: name,
   });
 
-  const choiceItem = document.querySelectorAll(`.${name}`);
   const handleClick = (e) => {
+    const choiceItem = document.querySelectorAll(`.${name}`);
     [...choiceItem].forEach((item) => {
       item.classList.remove("active-question");
     });
-
-    // e.target.classList.add("active-question");
+    console.log(option);
+    if (e.target.value === option) {
+      e.target.parentNode.classList.add("active-question");
+    }
   };
 
-  useEffect(() => {
-    [...choiceItem].forEach((item) => {
-      item.addEventListener("click", handleClick);
-    });
-    return () => {
-      [...choiceItem].forEach((item) => {
-        item.removeEventListener("click", handleClick);
-      });
-    };
-  }, []);
   return (
     <label
+      onClick={handleClick}
       htmlFor={`${name}${index}`}
       className={`${name} border-[4px] p-[20px] rounded-xl hover:border-[#939bb4] transition-all linear cursor-pointer flex`}
     >

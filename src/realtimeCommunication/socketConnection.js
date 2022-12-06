@@ -13,6 +13,7 @@ import {
 } from "../store/friend/friendSlice";
 
 import { setPendingMemberInvitations } from "../store/member/memberSlice";
+import { setSavedEvent } from "../store/schedule/scheduleSlice";
 import { updateDirectChatHistoryIfActive } from "../utils/chat";
 import { domain } from "../utils/common";
 import * as videoHander from "./videoHander";
@@ -75,6 +76,7 @@ export const connectWithSocketServer = (user, dispatch) => {
   });
 
   socket.on("sendCardToClient", (data) => {
+    console.log(data);
     dispatch(setCardList(data));
   });
 
@@ -121,6 +123,12 @@ export const connectWithSocketServer = (user, dispatch) => {
     console.log("user left room", data);
     webRTCHandler.handleParticipantLeftRoom(data);
   });
+
+  // Schedule
+
+  socket.on("sendScheduleToClient", (data) => {
+    dispatch(setSavedEvent(data));
+  });
 };
 
 export const createCard = (data) => {
@@ -149,6 +157,11 @@ export const getNotStudied = (setId) => {
   socket?.emit("get-not-studied", setId);
 };
 
+export const updateCard = (data) => {
+  console.log(data);
+  socket?.emit("update-card", data);
+};
+
 // Chat
 export const sendDirectMessage = (data) => {
   socket?.emit("direct-message", data);
@@ -172,4 +185,21 @@ export const leaveRoom = (data) => {
 
 export const signalPeerData = (data) => {
   socket?.emit("conn-signal", data);
+};
+
+// Schedule
+export const joinSchedule = (data) => {
+  socket?.emit("join-schedule", data);
+};
+
+export const createSchedule = (data) => {
+  socket?.emit("create-schedule", data);
+};
+
+export const updateSchedule = (data) => {
+  socket?.emit("update-schedule", data);
+};
+
+export const deleteSchedule = (data) => {
+  socket?.emit("delete-schedule", data);
 };

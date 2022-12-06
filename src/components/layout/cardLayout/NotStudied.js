@@ -3,8 +3,9 @@ import { useSelector } from "react-redux";
 import SubCard from "../../card/SubCard";
 
 const NotStudied = () => {
-  const { cardNoStudied } = useSelector((state) => state.card);
+  const { cardList } = useSelector((state) => state.card);
 
+  const cardNoStudied = cardList.filter((el) => el.isLearned === false);
   return (
     <>
       <div className="mt-[28px] text-red-400 text-[18px] font-bold">

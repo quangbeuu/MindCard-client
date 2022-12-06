@@ -1,10 +1,22 @@
+import axios from "axios";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuthStateChanged from "../../hooks/useAuthStateChanged";
+import { domain } from "../../utils/common";
 
 const UserBox = ({ isOpen = false }) => {
   const { user } = useAuthStateChanged();
+  const navigate = useNavigate();
 
+  const handleLogout = async () => {
+    try {
+      await axios.get(`${domain}/api/v1/users/logout`);
+      // refresh lại trang
+      navigate(0);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <div
       className={`box absolute bg-white top-10 right-0 shadow-card rounded-[8px] w-[200px] overflow-hidden ${
@@ -23,13 +35,18 @@ const UserBox = ({ isOpen = false }) => {
         </div>
       </div>
       <div className="text-[14px] font-semibold">
-        <div className="px-5 py-[12px] hover:text-[#ffcd1f] transition ease-in duration-100ms cursor-pointer">
-          <Link to="/profile">Profile</Link>
-        </div>
+        <Link to={`/profile/${user._id}/dashboard`}>
+          <div className="px-5 py-[12px] hover:text-[#ffcd1f] transition ease-in duration-100ms cursor-pointer">
+            Profile
+          </div>
+        </Link>
         <div className="px-5 py-[12px] hover:text-[#ffcd1f] transition ease-in duration-100ms cursor-pointer">
           <Link to="/settings">Settings</Link>
         </div>
-        <div className="px-5 py-[12px] hover:text-[#ffcd1f] transition ease-in duration-100ms cursor-pointer">
+        <div
+          className="px-5 py-[12px] hover:text-[#ffcd1f] transition ease-in duration-100ms cursor-pointer"
+          onClick={handleLogout}
+        >
           Logout
         </div>
       </div>

@@ -16,6 +16,7 @@ import {
   CreateSetPage,
   SetPage,
 } from "./pages";
+import SchedulePage from "./pages/schedule/SchedulePage";
 import EssayPage from "./pages/test/EssayPage";
 import MultipleChoicePage from "./pages/test/MultipleChoicePage";
 import ResultPage from "./pages/test/ResultPage";
@@ -56,7 +57,10 @@ const Router = () => {
 
       {isLogin && (
         <>
-          <Route path="/profile" element={<UserProfile></UserProfile>}></Route>
+          <Route
+            path="/profile/:userId/*"
+            element={<UserProfile></UserProfile>}
+          ></Route>
           {/* <Route
             path="/class/:classId/*"
             element={<ClassPage></ClassPage>}
@@ -78,6 +82,10 @@ const Router = () => {
           <Route
             path="/set/:setId/result/:testId/:type"
             element={<ResultPage></ResultPage>}
+          ></Route>
+          <Route
+            path="/schedule/:userId"
+            element={<SchedulePage></SchedulePage>}
           ></Route>
         </>
       )}
